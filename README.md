@@ -90,15 +90,19 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 ## Переменные окружения
 
-<<<<<<< HEAD
+=======
+
 - `WORD_TEMPLATE_PATH` - Путь к активному Word-шаблону.
 
 По умолчанию в `docker-compose.yml` шаблон хранится в volume (bind mount) и переживает перезапуски контейнеров:
 - `WORD_TEMPLATE_PATH=/data/Template.docx`
 - `./volumes/word-template:/data`
+
 =======
 - `WORD_TEMPLATE_PATH` - Путь к шаблону Word (по умолчанию: `/app/Template.docx`)
->>>>>>> a2c02a7 (.env update)
+
+=======
+
 
 В репозитории хранится файл `.env.example`.
 
