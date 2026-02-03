@@ -5,7 +5,7 @@ FastAPI приложение для генерации экономическо�
 ## Структура проекта
 
 ```
-main_prod/
+main_auto/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py                 # Точка входа приложения
@@ -15,7 +15,8 @@ main_prod/
 │   │       ├── __init__.py
 │   │       └── endpoints/
 │   │           ├── __init__.py
-│   │           └── calendar.py  # Эндпоинты календаря
+│   │           ├── calendar.py  # Эндпоинты календаря
+│   │           └── template.py  # Управление Word-шаблоном
 │   ├── core/                   # Конфигурация
 │   │   ├── __init__.py
 │   │   └── config.py           # Настройки приложения
@@ -27,13 +28,18 @@ main_prod/
 │   │   ├── calendar_service.py # Обработка данных календаря
 │   │   ├── data_store.py       # Хранилище данных
 │   │   ├── excel_service.py    # Генерация Excel
+│   │   ├── template_service.py # Управление Word-шаблоном
 │   │   └── word_service.py     # Генерация Word
 │   └── utils/                  # Утилиты
 │       ├── __init__.py
 │       ├── constants.py        # Константы
 │       ├── date_utils.py       # Работа с датами
 │       └── text_utils.py       # Обработка текста
-├── Template.docx               # Шаблон Word документа
+├── Template.docx               # Word-шаблон по умолчанию (fallback)
+├── volumes/
+│   └── word-template/
+│       └── Template.docx       # Активный Word-шаблон (создаётся после загрузки/первой генерации)
+├── .env.example
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt
@@ -78,10 +84,17 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 - `GET /api/calendar/generate` - Генерация Excel файла
 - `GET /api/calendar/generate-word` - Генерация Word файла
 - `POST /api/calendar/clear` - Очистка данных
+- `GET /api/template` - Информация о текущем Word-шаблоне
+- `POST /api/template` - Загрузка нового Word-шаблона (.docx, multipart/form-data)
+- `GET /api/template/download` - Скачать текущий Word-шаблон (.docx)
 
 ## Переменные окружения
 
-- `WORD_TEMPLATE_PATH` - Путь к шаблону Word (по умолчанию: `/app/Template.docx`)
+- `WORD_TEMPLATE_PATH` - Путь к активному Word-шаблону.
+
+По умолчанию в `docker-compose.yml` шаблон хранится в volume (bind mount) и переживает перезапуски контейнеров:
+- `WORD_TEMPLATE_PATH=/data/Template.docx`
+- `./volumes/word-template:/data`
 
 В репозитории хранится файл `.env.example`.
 
