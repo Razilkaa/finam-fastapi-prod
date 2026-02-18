@@ -16,7 +16,7 @@ RUN uv pip install --system -r /app/requirements.txt
 
 COPY app/ /app/app/
 COPY Template.docx /app/Template.docx
-
+COPY Template_quotes.docx /app/Template_quotes.docx
 EXPOSE 8000
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
